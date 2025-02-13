@@ -1,0 +1,47 @@
+[project]
+name = "fastapiplayground"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Your Name",email = "you@example.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "fastapi[standard] (>=0.115.8,<0.116.0)",
+    "uvicorn (>=0.34.0,<0.35.0)",
+    "taskipy (>=1.14.1,<2.0.0)",
+    "lint (>=1.2.1,<2.0.0)"
+]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+[tool.taskipy.tasks]
+lint = 'ruff check && ruff check . --diff'
+pre_format = 'ruff check --fix'
+format = 'ruff format'
+run = 'fastapi dev fastapiplayground/main.py'
+pre_test = ''
+test = 'pytest -s -x --cov=fastapiplayground -vv'
+post_test = 'coverage html'
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.9.6"
+pytest = "^8.3.4"
+pytest-cov = "^6.0.0"
+
+
